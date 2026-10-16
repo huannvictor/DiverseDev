@@ -16,19 +16,25 @@ Este arquivo orienta assistentes de IA e pessoas colaboradoras sobre como o proj
 
 O projeto foi mantido intencionalmente simples e sem dependências externas:
 
-* **[`entrega_velozmart_mps.html`](entrega_velozmart_mps.html):**
-  * É o arquivo principal do projeto. Contém toda a estrutura HTML, estilização CSS (tema corporativo escuro/laranja VelozMart + regras `@media print`) e o botão de alternância do roteiro de apresentação.
-  * **Seções Obrigatórias:** (1) Problema, (2) Algoritmo/Estrutura, (3) Diagrama Visual, (4) Trade-offs & Big-O, (5) Métricas & Próximos Passos.
-  * **Roteiro de Apresentação:** Fica dentro das `<div>` com a classe `.speaker-cue` no início de cada seção.
+* **[`Velox Mart - Grupo 04.html`](Velox%20Mart%20-%20Grupo%2004.html) e [`Velox Mart - Grupo 04.pdf`](Velox%20Mart%20-%20Grupo%2004.pdf):**
+  * É a proposta técnica oficial formatada em estilo executivo claro (A4 print-ready) aderente às 5 seções do template da banca.
+  * **Seções Obrigatórias:** (1) Problema, (2) Algoritmo / Estrutura, (3) Diagrama, (4) Trade-offs, (5) Próximos passos.
+  * **Diagrama SVG Vetorial:** Gráfico de fluxo embutido diretamente no HTML com legenda e marcação de contraste.
+* **[`docs/v01/`](docs/v01/):**
+  * Versões conceituais anteriores (`entrega_velozmart_mps.html` e `entrega_velozmart_mps_com_roteiro.html`), onde fica preservado o roteiro de fala detalhado dos 5 apresentadores.
 * **[`docs/enunciado-projeto.md`](docs/enunciado-projeto.md) e [`docs/guia-coding-tank.html`](docs/guia-coding-tank.html):**
-  * Contêm as instruções originais e os requisitos mínimos da avaliação. Não devem ter suas regras alteradas.
+  * Contêm as instruções originais e os requisitos mínimos da avaliação (template Canvas-PDF da banca). Não devem ter suas regras alteradas.
 * **[`docs/brainstorming-grupo.md`](docs/brainstorming-grupo.md):**
-  * Rascunho colaborativo com as ideias originais do grupo e as duas versões de pseudocódigo (completa e compacta para slide).
+  * Rascunho colaborativo com as ideias originais do grupo e as duas versões de pseudocódigo.
 
 ---
 
-## 3. Boas Práticas ao Modificar o `entrega_velozmart_mps.html`
+## 3. Boas Práticas ao Modificar o `Velox Mart - Grupo 04.html`
 
-1. **Mantenha o arquivo autocontido:** Evite adicionar bibliotecas externas que precisem de `npm` ou build, para que qualquer pessoa do grupo consiga abrir o `entrega_velozmart_mps.html` com duplo-clique em qualquer computador.
-2. **Preserve a Acessibilidade:** As tags de status utilizam **Símbolo + Cor de Alto Contraste + Texto** (`● Alerta SLA`, `▲ Alta Prioridade`, `◆ Buffer de Doca`, `✓ Expedido`) para não depender apenas de cores.
-3. **Preserve a Impressão PDF (`@media print`):** Garanta que a barra superior (`.top-bar`) continue oculta na impressão e que os cards (`.card`) mantenham `break-inside: avoid`.
+1. **Mantenha o arquivo autocontido:** Sem dependências externas de pacotes (`npm`) ou fontes externas obrigatórias, para abrir com duplo clique em qualquer navegador.
+2. **Preserve a Diagramação A4 e Quebras de Página (`@page` e `@media print`):**
+   * Configuração de página `@page { size: A4; margin: 12mm 13mm }`.
+   * A classe `.topbar` deve permanecer oculta na impressão (`display: none`).
+   * Elementos sensíveis usam `break-inside: avoid` e `.page-before` usa `break-before: page`.
+3. **Preserve a Acessibilidade Visual:** Cores acompanhadas por texto legível, ícones ou bordas distintivas (não depender apenas de cor).
+

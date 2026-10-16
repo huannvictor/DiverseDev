@@ -39,36 +39,44 @@ Nossa proposta combina duas estruturas clássicas para unir velocidade de proces
 
 ```text
 DiverseDev/
-├── entrega_velozmart_mps.html   # Entrega final interativa (Proposta Técnica + Roteiro de Fala + Exportação PDF)
+├── Velox Mart - Grupo 04.html   # Proposta Técnica oficial alinhada ao template do Coding Tank (HTML A4 print-ready)
+├── Velox Mart - Grupo 04.pdf    # Versão em PDF oficial pronta para submissão
 ├── README.md                    # Documentação principal do repositório
 ├── AGENT.md                     # Contexto do projeto e instruções para Agentes de IA e colaboradores
 ├── LICENSE                      # Licença MIT
 ├── .gitignore                   # Arquivos ignorados pelo Git
 │
 ├── docs/                        # Documentos originais, rascunhos e materiais de referência
-│   ├── enunciado-projeto.md     # Enunciado original do desafio (Projeto Divesedev.md)
-│   ├── brainstorming-grupo.md   # Anotações do grupo e versões do pseudocódigo (ideias do grupo.md)
-│   ├── guia-coding-tank.html    # Guia interativo original do Coding Tank (projeto_final_mps.html)
+│   ├── enunciado-projeto.md     # Enunciado original do desafio e rubric de avaliação
+│   ├── brainstorming-grupo.md   # Anotações do grupo e versões do pseudocódigo
+│   ├── guia-coding-tank.html    # Guia interativo original do Coding Tank
 │   ├── apresentacao/
 │   │   └── Apresentacao-Corporate-Heap-Priorizacao-Canva.pdf   # Slides da apresentação
-│   └── materiais-aula/
-│       ├── Aula-Dia-01.pdf      # Material da Aula 1
-│       └── Big-O-Didatico.pdf   # Guia didático sobre complexidade Big-O
+│   ├── materiais-aula/
+│   │   ├── Aula-Dia-01.pdf      # Material da Aula 1
+│   │   └── Big-O-Didatico.pdf   # Guia didático sobre complexidade Big-O
+│   └── v01/                     # Histórico: versões iniciais da entrega
+│       ├── entrega_velozmart_mps.html               # Versão conceitual estendida v1
+│       └── entrega_velozmart_mps_com_roteiro.html   # Versão v1 com roteiro de fala para 5 pessoas
 │
 └── assets/
-    └── images/                  # Identidade visual (Logos e Banners VeloxMart / DiverseDEV)
-        ├── veloxmart-banner.png
-        ├── veloxmart-logo.png
-        └── diversedev-hero.png
+    ├── images/                  # Identidade visual (Logos e Banners VeloxMart / DiverseDEV)
+    │   ├── veloxmart-banner.png
+    │   ├── veloxmart-logo.png
+    │   └── diversedev-hero.png
+    └── vids/                    # Gravações da apresentação do projeto
 ```
 
 ---
 
 ## 🚀 Como Visualizar e Editar
 
-1. **Visualizar a Proposta / Gerar PDF:**
-   * Basta abrir o arquivo [`entrega_velozmart_mps.html`](entrega_velozmart_mps.html) em qualquer navegador.
-   * Use o botão **"🎙️ Mostrar / Ocultar Roteiro de Fala"** no topo da página para ver as falas sugeridas para os 5 integrantes.
-   * Use o botão **"🖨️ Imprimir / Salvar como PDF Oficial"** para exportar o documento pronto para entrega.
-2. **Editar o Projeto:**
-   * Todo o conteúdo, estilo e roteiro da entrega final está centralizado em [`entrega_velozmart_mps.html`](entrega_velozmart_mps.html), facilitando a edição direta em qualquer editor de texto (como o VS Code) sem necessidade de instalar dependências.
+1. **Visualizar a Proposta Oficial / Gerar PDF:**
+   * O documento principal de entrega é o [`Velox Mart - Grupo 04.html`](Velox%20Mart%20-%20Grupo%2004.html), estruturado exatamente no padrão de 5 seções do template oficial do curso.
+   * Você também pode acessar diretamente o arquivo compilado pronto para envio: [`Velox Mart - Grupo 04.pdf`](Velox%20Mart%20-%20Grupo%2004.pdf).
+   * Para gerar um novo PDF a partir do HTML, basta abrir [`Velox Mart - Grupo 04.html`](Velox%20Mart%20-%20Grupo%2004.html) no navegador e clicar no botão **"Imprimir / Salvar em PDF"** no topo da página (já configurado com `@page { size: A4; margin: 12mm 13mm }`).
+2. **Consultar o Roteiro de Fala da Apresentação:**
+   * O roteiro detalhado de fala dividido entre os integrantes do grupo está preservado em [`docs/v01/entrega_velozmart_mps_com_roteiro.html`](docs/v01/entrega_velozmart_mps_com_roteiro.html).
+3. **Editar o Projeto:**
+   * Todo o conteúdo, diagramação SVG e estilização da proposta oficial estão centralizados em [`Velox Mart - Grupo 04.html`](Velox%20Mart%20-%20Grupo%2004.html), sem nenhuma dependência de build ou frameworks externos.
+
