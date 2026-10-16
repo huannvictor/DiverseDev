@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marketplace Priority Sorter (MPS) — Proposta Técnica VeloxMart</title>
+<style>
+:root{--ink:#17202d;--muted:#526174;--orange:#e76a13;--orange-soft:#fff0e5;--green:#16784c;--green-soft:#e9f7ef;--red:#b42328;--red-soft:#fff0ef;--amber:#8c5b00;--amber-soft:#fff6dd;--line:#d8dee7;--paper:#fff;--panel:#f7f9fc;--navy:#111a29}
+*{box-sizing:border-box}html{background:#e9edf3}body{margin:0;color:var(--ink);font:10.5pt/1.46 Arial,Helvetica,sans-serif;background:var(--paper)}
+.topbar{position:sticky;top:0;z-index:5;background:#101722;color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:3px solid var(--orange)}.topbar strong{font-size:10pt}.btn{border:0;border-radius:6px;padding:9px 13px;font-weight:700;cursor:pointer;text-decoration:none;font-size:9.5pt}.btn-primary{background:var(--orange);color:#fff}.btn-secondary{background:#29364a;color:#fff;border:1px solid #56647a}
+.hero{background:linear-gradient(120deg,#101722,#202c3d 75%,#462914);color:#fff;padding:34px max(24px,calc((100% - 960px)/2)) 30px;border-bottom:5px solid var(--orange)}.kicker{display:inline-block;text-transform:uppercase;letter-spacing:.08em;font-size:8pt;font-weight:700;color:#ffd4b5;border:1px solid #9e5426;border-radius:4px;padding:5px 8px}.hero h1{font-size:27pt;line-height:1.1;margin:13px 0 10px;letter-spacing:-.5px}.hero h1 em{font-style:normal;color:#ff9a55}.hero p{max-width:760px;color:#e4eaf2;margin:0;font-size:11.5pt}.meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px}.meta span{font-size:8.5pt;border:1px solid #56647a;border-radius:5px;padding:5px 8px;color:#f1f5fa}
+main{max-width:960px;margin:22px auto;padding:0 18px 34px}.section{border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:16px;background:#fff;box-shadow:0 2px 7px #18263a0a}.section-label{color:var(--orange);font-size:8pt;text-transform:uppercase;font-weight:800;letter-spacing:.08em;margin-bottom:5px}.section h2{font-size:17pt;line-height:1.2;margin:0 0 12px;color:var(--navy)}.section h3{font-size:11.5pt;margin:16px 0 6px;color:#202e43}.section p{margin:7px 0}.muted{color:var(--muted)}.lead{font-size:11pt}
+.grid{display:grid;gap:10px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--panel);break-inside:avoid}.panel h3{margin:0 0 5px;font-size:10.5pt}.panel p{margin:0;font-size:9.3pt}.tag{display:inline-block;border-radius:4px;background:var(--orange-soft);color:#9b3d00;padding:3px 7px;font-weight:700;font-size:8pt}.formula{font-family:Consolas,Menlo,monospace;background:#f4f6f9;border:1px solid var(--line);border-radius:6px;padding:9px 11px;display:block;font-size:9.1pt;overflow-wrap:anywhere}.note{border-left:4px solid var(--orange);background:var(--orange-soft);padding:10px 12px;margin:12px 0;border-radius:0 6px 6px 0}.note.warn{border-color:#c78a00;background:var(--amber-soft)}.note.good{border-color:var(--green);background:var(--green-soft)}
+table{border-collapse:collapse;width:100%;font-size:8.8pt;margin:10px 0}th{background:#172337;color:#fff;text-align:left;font-weight:700}th,td{padding:8px 9px;border:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f8fafc}.num{text-align:right;white-space:nowrap}.pill{display:inline-block;padding:3px 6px;border-radius:4px;font-weight:700;font-size:7.8pt}.critical{background:var(--red-soft);color:var(--red)}.ok{background:var(--green-soft);color:var(--green)}.waiting{background:var(--amber-soft);color:var(--amber)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#111a29;color:#f4f7fb;border-radius:8px;padding:13px 15px;font:8.5pt/1.42 Consolas,Menlo,monospace;margin:8px 0}.legend{display:flex;gap:8px 12px;flex-wrap:wrap;margin:10px 0 12px;font-size:8.3pt}.legend span{display:flex;align-items:center;gap:5px}.dot{width:10px;height:10px;border-radius:2px;display:inline-block}.diagram{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fbfcfe}.diagram svg{width:100%;height:auto;display:block}.small{font-size:8.5pt}.trade-good{border-top:4px solid var(--green)}.trade-bad{border-top:4px solid var(--red)}.footer{color:var(--muted);font-size:8pt;text-align:center;padding:8px 0 0}
+@page{size:A4;margin:12mm 13mm}
+@media print{html,body{background:#fff}.topbar{display:none}.hero{padding:18px 22px 16px;print-color-adjust:exact;-webkit-print-color-adjust:exact}.hero h1{font-size:23pt}.hero p{font-size:10pt}.hero .meta{margin-top:10px}.hero .meta span{font-size:7.5pt}main{max-width:none;margin:12px 0;padding:0}.section{box-shadow:none;padding:15px 17px;margin-bottom:10px;border-radius:7px;break-inside:auto}.section h2{font-size:15pt}.section h3{font-size:10pt;margin-top:11px}.grid-3,.grid-2{gap:7px}.panel{padding:8px}.panel p{font-size:8.4pt}.section-label{font-size:7.2pt}table{font-size:7.7pt;margin:7px 0}th,td{padding:5px 6px}pre{font-size:7.4pt;padding:10px}.diagram{break-inside:avoid}.keep{break-inside:avoid}.page-before{break-before:page}.footer{padding-top:4px}a{color:inherit;text-decoration:none}}
+@media(max-width:650px){.hero{padding:25px 20px}.hero h1{font-size:23pt}main{padding:0 10px}.section{padding:16px}.grid-3,.grid-2{grid-template-columns:1fr}table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="topbar"><strong>VeloxMart · Projeto Final · Marketplace Priority Sorter (MPS)</strong><div><button class="btn btn-secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Voltar ao início</button> <button class="btn btn-primary" onclick="window.print()">Imprimir / Salvar em PDF</button></div></div>
+<header class="hero">
+  <span class="kicker">Proposta técnica · Algoritmos e estruturas de dados</span>
+  <h1>MARKETPLACE <em>PRIORITY SORTER</em></h1>
+  <p>Uma proposta para ordenar pedidos de expedição em tempo real, equilibrando prioridade comercial, risco de atraso e capacidade física da doca.</p>
+  <div class="meta"><span><b>Cenário:</b> fictício — VeloxMart</span><span><b>Área:</b> TI + Logística</span><span><b>Abordagem:</b> Max-Heap + buffer ordenado</span></div>
+</header>
+<main>
+<section class="section">
+  <div class="section-label">1 · Problema</div>
+  <h2>Priorizar sem deixar a expedição parada</h2>
+  <p class="lead">A VeloxMart precisa exibir e atualizar uma fila de pedidos aguardando expedição. A ordem deve considerar a relevância de cada pedido e o tempo restante até o prazo, sem ignorar a capacidade física da doca. Como novos pedidos chegam e os prazos diminuem continuamente, a lista precisa ser atualizada com baixo custo e evitar que uma embalagem grande bloqueie pedidos menores que já podem ser processados.</p>
+  <div class="grid grid-3" style="margin-top:13px">
+    <div class="panel"><h3><code>priorityScore</code></h3><p>Nota de 0 a 100, fornecida por um componente de IA a partir de distância, SLA contratado, valor do item e reputação do vendedor.</p></div>
+    <div class="panel"><h3><code>dispatchWindow</code></h3><p>Minutos restantes até o limite de expedição. Diminui com o tempo e aumenta o risco de atraso.</p></div>
+    <div class="panel"><h3><code>sizeCategory</code></h3><p>Tamanho P, M ou G. Para a simulação: P ocupa 1 vaga, M ocupa 2 e G ocupa 4.</p></div>
+  </div>
+  <div class="note"><b>Objetivo:</b> reduzir atrasos e quebras de SLA, manter a doca produtiva e atualizar prioridades sem reordenar toda a fila a cada novo pedido.</div>
+</section>
+
+<section class="section">
+  <div class="section-label">2 · Algoritmo / Estrutura</div>
+  <h2>Max-Heap global + buffer ordenado com Insertion Sort</h2>
+  <p>O <b>Max-Heap</b> mantém no topo o pedido com maior chave de prioridade. Inserir ou remover o topo custa <code>O(log n)</code>, e consultar o topo custa <code>O(1)</code>. Para conciliar prioridade e encaixe físico, o sistema transfere até <code>k = 10</code> candidatos para um buffer pequeno, mantido em ordem por Insertion Sort. Inserir um candidato em um buffer já ordenado custa até <code>O(k)</code>; ordenar novamente todos os k candidatos pode custar <code>O(k²)</code>, mas o lote é pequeno e limitado a 10 itens. A doca percorre o buffer em até <code>O(k)</code> e seleciona o primeiro pedido que cabe no espaço disponível.</p>
+  <h3>Regra de prioridade</h3>
+  <div class="grid grid-2">
+    <div class="panel"><h3>Passo 1 · Converter prazo em urgência</h3><span class="formula">urgencia = limitar(0, 100, ((120 − minutosRestantes) / 120) × 100)</span><p class="muted small" style="margin-top:6px">A referência de 120 minutos é uma hipótese inicial do protótipo. Prazos acima de 120 min recebem 0; prazo expirado recebe 100.</p></div>
+    <div class="panel"><h3>Passo 2 · Combinar relevância e urgência</h3><span class="formula">scoreBase = 0,70 × priorityScore + 0,30 × urgencia</span><span class="formula" style="margin-top:6px">chave = scoreBase + bônusSLA</span><p class="muted small" style="margin-top:6px">Se restarem 15 minutos ou menos, <code>bônusSLA = 25</code>; caso contrário, é 0. A chave pode ultrapassar 100, pois o bônus é uma regra adicional de emergência.</p></div>
+  </div>
+  <h3>Exemplo calculado</h3>
+  <table><thead><tr><th>Pedido</th><th>IA</th><th>Prazo</th><th>Tam.</th><th>Urgência</th><th>Chave MPS</th></tr></thead><tbody>
+    <tr><td>#102</td><td class="num">65</td><td>10 min</td><td>G · 4 vagas</td><td class="num">91,7</td><td><b>98,0</b> <span class="pill critical">SLA crítico</span></td></tr>
+    <tr><td>#104</td><td class="num">50</td><td>5 min</td><td>P · 1 vaga</td><td class="num">95,8</td><td><b>88,8</b> <span class="pill critical">SLA crítico</span></td></tr>
+    <tr><td>#101</td><td class="num">90</td><td>40 min</td><td>P · 1 vaga</td><td class="num">66,7</td><td><b>83,0</b></td></tr>
+    <tr><td>#103</td><td class="num">80</td><td>25 min</td><td>M · 2 vagas</td><td class="num">79,2</td><td><b>79,8</b></td></tr>
+  </tbody></table>
+  <p class="small muted">Exemplo de doca com 3 vagas livres: #102 lidera a prioridade, mas G precisa de 4 vagas. O buffer permite selecionar #104 e depois #101, ambos P, usando 2 das 3 vagas. O #103 (M) não cabe na vaga restante. Os cálculos foram arredondados para uma casa decimal.</p>
+  <h3>Pseudocódigo resumido</h3>
+  <pre>AO RECEBER pedido:
+  calcular urgência e chave de prioridade
+  inserir pedido no Max-Heap
+
+AO PREPARAR A DOCA:
+  preencher buffer com até 10 pedidos de maior prioridade
+  ordenar o buffer por chave (desempate: chegada mais antiga)
+  procurar, na ordem, o primeiro pedido que cabe na capacidade livre
+  se encontrar: despachar e retirar do buffer
+  se nenhum couber: buscar mais candidatos ou aguardar liberação de espaço
+
+A CADA 60 SEGUNDOS (protótipo):
+  reunir todos os pedidos ainda pendentes (Heap + buffer)
+  atualizar prazos e chaves; reconstruir o Heap em O(n)
+  reconstruir o buffer com os melhores candidatos
+
+AO CANCELAR/ALTERAR pedido:
+  invalidar a versão antiga; inserir a versão atualizada, se houver</pre>
+  <div class="note warn"><b>Regra de segurança:</b> o buffer não pode bloquear o fluxo quando nenhum dos candidatos cabe. O sistema deve ampliar a busca em lotes ou aguardar liberação da doca e registrar a ocorrência. Os 60 segundos, os pesos 70/30 e o bônus +25 são parâmetros iniciais a calibrar por simulação.</div>
+</section>
+
+<section class="section page-before">
+  <div class="section-label">3 · Diagrama</div>
+  <h2>Fluxo de inclusão, remoção e repriorização</h2>
+  <p>O fluxo separa a triagem por prioridade da decisão de encaixe físico. A cor é acompanhada por rótulos para que o diagrama não dependa somente da percepção de cor.</p>
+  <div class="legend"><span><i class="dot" style="background:#fce4d4;border:1px solid #c85b12"></i> Triagem / prioridade</span><span><i class="dot" style="background:#e5efff;border:1px solid #426fb5"></i> Buffer / candidatos</span><span><i class="dot" style="background:#dcf4e5;border:1px solid #23834f"></i> Pedido despachado</span><span><i class="dot" style="background:#fff0cc;border:1px solid #a56b00"></i> Espera / atualização</span></div>
+  <div class="diagram">
+  <svg viewBox="0 0 760 490" role="img" aria-label="Fluxograma MPS: chegada e cálculo, Max-Heap, buffer dos dez candidatos, teste de capacidade e despacho ou espera, com atualização periódica de prazos e prioridades." xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#607087"/></marker></defs>
+    <rect width="760" height="490" rx="8" fill="#fbfcfe"/>
+    <g font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#182437">
+      <rect x="255" y="18" width="250" height="54" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/><text x="380" y="40" font-size="14" font-weight="700">Novo pedido chega</text><text x="380" y="57" font-size="11">ou pedido é atualizado</text>
+      <path d="M380 72 V94" stroke="#607087" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="220" y="96" width="320" height="63" rx="8" fill="#fce4d4" stroke="#c85b12" stroke-width="1.7"/><text x="380" y="119" font-size="14" font-weight="700">Calcular chave de prioridade</text><text x="380" y="138" font-size="11">70% nota IA + 30% urgência + bônus SLA</text>
+      <path d="M380 159 V181" stroke="#607087" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="220" y="183" width="320" height="62" rx="8" fill="#fce4d4" stroke="#c85b12" stroke-width="1.7"/><text x="380" y="206" font-size="14" font-weight="700">Max-Heap global</text><text x="380" y="225" font-size="11">Topo O(1) · inserir/remover O(log n)</text>
+      <path d="M380 245 V267" stroke="#607087" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="220" y="269" width="320" height="58" rx="8" fill="#e5efff" stroke="#426fb5" stroke-width="1.7"/><text x="380" y="292" font-size="14" font-weight="700">Buffer ordenado (até k = 10)</text><text x="380" y="310" font-size="11">Busca o pedido prioritário que cabe na doca</text>
+      <path d="M380 327 V348 H190 V369" fill="none" stroke="#607087" stroke-width="2" marker-end="url(#arr)"/><path d="M380 348 H570 V369" fill="none" stroke="#607087" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="72" y="371" width="236" height="66" rx="8" fill="#dcf4e5" stroke="#23834f" stroke-width="1.7"/><text x="190" y="394" font-size="14" font-weight="700">Cabe na capacidade?</text><text x="190" y="414" font-size="12">Sim → despachar pedido</text><text x="190" y="428" font-size="10">Atualizar vagas livres</text>
+      <rect x="452" y="371" width="236" height="66" rx="8" fill="#fff0cc" stroke="#a56b00" stroke-width="1.7"/><text x="570" y="394" font-size="14" font-weight="700">Não cabe nenhum?</text><text x="570" y="414" font-size="12">Buscar novos candidatos</text><text x="570" y="428" font-size="10">ou aguardar liberação</text>
+      <rect x="115" y="450" width="530" height="29" rx="6" fill="#f0f3f7" stroke="#64748b" stroke-dasharray="4 3"/><text x="380" y="468" font-size="10">Rotina periódica independente: a cada 60 s, recalcular chaves e reconstruir Heap O(n)</text>
+    </g>
+  </svg>
+  </div>
+  <h3>Operações principais</h3>
+  <table><thead><tr><th>Operação</th><th>Como funciona</th><th>Custo esperado no protótipo</th></tr></thead><tbody>
+   <tr><td><b>Inclusão</b></td><td>Calcula a chave e insere o novo pedido no Heap.</td><td><code>O(log n)</code></td></tr>
+   <tr><td><b>Remoção / despacho</b></td><td>Retira candidatos do Heap, analisa o buffer e despacha o primeiro que cabe.</td><td>Heap <code>O(log n)</code>; varredura do buffer <code>O(k)</code>.</td></tr>
+   <tr><td><b>Repriorização</b></td><td>Como a chave muda com o tempo, recalcula os pedidos pendentes e reconstrói o Heap.</td><td><code>O(n)</code> por reconstrução; buffer reordenado separadamente.</td></tr>
+   <tr><td><b>Cancelamento / alteração</b></td><td>Marca a versão antiga como inválida e desconsidera-a ao encontrá-la; insere uma nova versão se o pedido foi alterado.</td><td>Marcação <code>O(1)</code>; limpeza posterior pode exigir remoção.</td></tr>
+  </tbody></table>
+</section>
+
+<section class="section page-before">
+  <div class="section-label">4 · Trade-offs</div>
+  <h2>Por que escolher esta abordagem?</h2>
+  <p>A arquitetura híbrida é uma escolha de protótipo para equilibrar muitos pedidos pendentes com uma doca de capacidade limitada. Não garante, por si só, o melhor resultado para toda operação: pesos, tamanho do buffer e frequência de atualização precisam ser testados com dados representativos.</p>
+  <div class="grid grid-2">
+    <div class="panel trade-good"><h3>3 vantagens</h3><ol style="padding-left:18px;margin:6px 0 0"><li><b>Inserção eficiente:</b> o Heap evita reordenar a lista inteira a cada nova chegada.</li><li><b>Considera a doca:</b> o buffer procura um pedido de alta prioridade que caiba, reduzindo bloqueios causados por tamanhos incompatíveis.</li><li><b>Regra explicável:</b> pesos, urgência, limiar e bônus são explícitos e podem ser auditados e calibrados.</li></ol></div>
+    <div class="panel trade-bad"><h3>3 limitações</h3><ol style="padding-left:18px;margin:6px 0 0"><li><b>Repriorização custa caro:</b> reconstruir o Heap a cada minuto é <code>O(n)</code>; precisa ser validado com o volume real.</li><li><b>Possível espera prolongada:</b> pedidos grandes ou de baixa pontuação podem aguardar; exige monitoramento contra starvation e busca além do buffer quando necessário.</li><li><b>Parâmetros não comprovados:</b> pesos 70/30, bônus +25, janela de 120 min e buffer 10 são hipóteses iniciais, não resultados otimizados.</li></ol></div>
+  </div>
+  <h3>Comparação simplificada</h3>
+  <table><thead><tr><th>Alternativa</th><th>Ponto forte</th><th>Limitação para este cenário</th></tr></thead><tbody>
+   <tr><td><b>FIFO</b> (ordem de chegada)</td><td>Simples e previsível.</td><td>Ignora urgência, valor estratégico e capacidade física.</td></tr>
+   <tr><td><b>Menor prazo primeiro</b></td><td>Regra fácil de explicar; favorece o prazo mais próximo.</td><td>Não pondera relevância comercial e pode escolher um pacote que não cabe na doca disponível.</td></tr>
+   <tr><td><b>Ordenar lista inteira</b></td><td>Produz uma lista ordenada por critério.</td><td>Reordenar após cada evento custa tipicamente <code>O(n log n)</code>; é desperdício se só precisamos do próximo candidato.</td></tr>
+   <tr><td><b>MPS: Heap + buffer</b></td><td>Atualiza a fila principal com <code>O(log n)</code> por inserção e considera o encaixe físico em um lote pequeno.</td><td>Mais componentes e regras; a rotina periódica <code>O(n)</code> e o tamanho do lote precisam de teste.</td></tr>
+  </tbody></table>
+  <div class="note good"><b>Justificativa:</b> o MPS foi escolhido porque a tarefa pede prioridade dinâmica e restrição de capacidade física. O Heap atende a triagem; o buffer trata o encaixe da doca. Essa justificativa demonstra adequação estrutural, mas a superioridade operacional só poderá ser afirmada após simulação ou piloto controlado.</div>
+</section>
+
+<section class="section page-before">
+  <div class="section-label">5 · Próximos passos</div>
+  <h2>Como comprovar e evoluir a solução</h2>
+  <h3>Métricas para comparação</h3>
+  <table><thead><tr><th>Métrica</th><th>O que mede</th><th>Como usar no teste</th></tr></thead><tbody>
+   <tr><td><b>Atraso médio</b></td><td>Tempo médio excedido após o prazo, considerando pedidos atrasados.</td><td>Comparar FIFO, menor prazo primeiro e MPS com o mesmo conjunto de pedidos.</td></tr>
+   <tr><td><b>Pedidos no prazo (%)</b></td><td>Parcela expedida até o limite de SLA.</td><td>Medir tanto a taxa geral quanto a de pedidos críticos.</td></tr>
+   <tr><td><b>Throughput (pedidos/hora)</b></td><td>Quantidade despachada por hora.</td><td>Comparar com a mesma capacidade, duração de atendimento e volume de chegada.</td></tr>
+   <tr><td><b>Ocupação e bloqueio da doca</b></td><td>Tempo com capacidade ociosa e vezes em que os candidatos não cabem.</td><td>Identificar ganhos de encaixe e possíveis esperas de pedidos grandes.</td></tr>
+   <tr><td><b>Custo computacional</b></td><td>Tempo de processamento e duração da repriorização.</td><td>Verificar se a atualização periódica termina dentro do intervalo previsto.</td></tr>
+  </tbody></table>
+  <h3>Plano de evolução</h3>
+  <div class="grid grid-3">
+    <div class="panel"><span class="tag">Etapa 1 · Agora</span><h3 style="margin-top:8px">Simulação reproduzível</h3><p>Usar pedidos históricos ou dados fictícios documentados, controlar a capacidade da doca e comparar FIFO, menor prazo e MPS em vários cenários de chegada.</p></div>
+    <div class="panel"><span class="tag">Etapa 2 · Após validar</span><h3 style="margin-top:8px">Piloto controlado</h3><p>Testar em operação limitada, com critérios de interrupção e comparação justa. Ajustar janela de urgência, bônus SLA e tamanho do buffer conforme os resultados.</p></div>
+    <div class="panel"><span class="tag">Etapa 3 · Futuro</span><h3 style="margin-top:8px">Aprendizado online</h3><p>Estudar ajuste automático dos pesos apenas quando houver dados confiáveis de resultado, monitoramento, limites de segurança e possibilidade de voltar à regra anterior.</p></div>
+  </div>
+  <div class="note warn"><b>Critério de sucesso:</b> não declarar que o MPS reduziu atrasos ou aumentou o throughput antes de medir. A decisão deve considerar simultaneamente SLA, pedidos por hora, ocupação, justiça entre pedidos e custo de processamento.</div>
+</section>
+<div class="footer">VeloxMart · Marketplace Priority Sorter (MPS) · Proposta conceitual para o Projeto Final · 2026</div>
+</main>
+</body>
+</html>
